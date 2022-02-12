@@ -1,0 +1,240 @@
+#HANDS ON
+#assigning IP address to linux system
+ip address  # shows the interfaces and IP address assigned to them
+cd /etc/netplan # there's a yaml file here. Open it and configure the interface here
+
+# File content after entering required details
+network:
+  ethernets:
+    eno1:
+      dhcp4: false
+      addresses: [192.168.13.200/24]
+      gateway4: 192.168.13.1
+      nameservers:
+        addresses: [192.168.10.250,1.1.1.1]
+
+    eno2:
+      dhcp4: true
+    eno3:
+      dhcp4: true
+    eno4:
+      dhcp4: true
+    ens5f0:
+      dhcp4: true
+    ens5f1:
+      dhcp4: true
+    enx0a94ef247d8c:
+      dhcp4: true
+  version: 2
+
+sudo netplan apply  # apply configuration in the yaml file and the interface settings will be set as per the file
+
+# set time in linux ?????????????????
+
+
+
+# format disks, create partition and create volumes
+
+fdisk -l | grep /dev/   # lists all disks and partitions under it
+fdisk /dev/sde          # configure partitions on /dev/sde disk, n- create partition, d- delete partition, w-write changes to partition, +500G to make 500GB partition
+
+#Know free disk space after creating multiple partitions?
+# create partition without mentioning start and end section
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# command -option /argument
+# command --help - to see help for a command
+pwd  # print working directory
+ls  # lists contents of the directory
+cd ..  # get back one directory back
+whoami  # print logged in user
+# everything in linux is stores in files. Commands, network settings, display settings, drivers everything
+# bin directory includes all command binaries. all commands are stored here as files
+# sbin directory includes command binaries for admin users (like adduser command binaries)
+# /usr directory also has bin and sbin directories 
+which ls  # displays the location of the command binary that os is using . Output should be /usr/bin/ls
+rm filename  # deletes file
+cp filetobecopied filetobepastedhere
+# lib directory in /usr directory has libraries that the command binaries share
+# local directory in /usr directory should include all command library that we create
+# var directory in root has variable files (logs, web app related files)
+# lib directory in root inclues libraries that system needs to boot
+# dev directory in root has all devices
+# etc directory in root has system configurations and settings
+# media directory in root is the directory where the USB devices are mounted automatically
+# manually mounted drives are present in mnt directory
+# Terminal emulator sends commands to shell (bash) to perform required operations
+# $ sign in the terminal shows that we are logged in as user, # for root
+# man commandname , man ls , man cat, man cd etc to get help about command that we know
+# ls --help  gives us help about a specific command and how to use it
+# apropos usb , if we do not know which command to use, apropos can search for those keywords in manual page description
+# apropos disk
+# apropos adduser
+# Bourne-Again Shell (BASH)
+# adduser adds user account, asks for password, creates home directory and sets bash as default shell
+# useradd only adds user account, no password set, no home dir , sh set as default shell
+adduser newusername
+cat /etc/passwd  # view the user accounts on the system here. username:x:userid:groupid  where x signifies that password is stored in shadow file
+cat /etc/shadow  # shows password hash for all user accounts on the system
+usermod username --shell /bin/bash --home homedirpath # change default shell for user account
+userdel username #Does not delete the home directory of the user
+deluser username #does not delete home directory of the user
+su username  # login as different user
+su - username # login as different user
+sudo visudo # recommended way to edit sudoers file
+username ALL = /sbin/adduser  # allows users to use adduser command
+groupadd groupname  #add group
+cat /etc/group  #view groups 
+groups # displays the groups that current logged on user belongs to
+usermod -g  groupname username # forces the group to be set as primary group. Removes user from any other group
+usermod -aG groupname username  # Adds user to new group keeping other group memberships intact
+id username  # displays group memberships of user
+gpasswd -d username groupname #remove user from a group. Note that the user should be a part of multiple groups. If user is only a part
+                           # of one group, we cannot remove it from that group
+
+
+
+
+# -a  and --all are same. --all is referred as long options and are used for ease of readability
+# man - manual pages are the documentation available in the operating system
+# man -k  calendar -> search by keyword. This does not search for content in man pages
+# man ls    - manual page help for ls command
+# id  - shows the groups that current user belongs to
+# sudo stands for super user do .. similar to runas administrator on windows.. 
+# sudo cat /etc/sudoers   - this file identifies which users can run commands as sudo. 
+# %sudo   ALL=(ALL:ALL) ALL - members of sudo group can run all commands on all systems as all users
+# sudo -i    - elevates the privilege for all commands entered after this. Not recommended. Enter sudo before a command just to elevate privileges for that command
+sudo apt-get update   # checks for updates and installs it
+sudo apt-get install apache2 -y # installs without prompting as -y is mentioned as option and sets up apache web server
+systemctl status apache2  # shows status of apache2 package installed in the last step
+
+ # apache2.service - The Apache HTTP Server               (this enabled shows that the service will survive reboot)
+ #    Loaded: loaded (/lib/systemd/system/apache2.service; enabled; vendor preset: enabled)  
+ #    Active: active (running) since Tue 2022-01-25 22:18:38 UTC; 1min 36s ago
+
+echo Hello  # echoes back "Hello" in the terminal
+echo Hello > /var/www/html/index.html   # redirect the echo to the file instead of echoing in the terminal. Creates the file if
+                                        # it does not exist or writes the content and overwrites the file
+                                        
+sudo bash -c 'echo "Welcome to my websiteSite" > /var/www/html/index.html' # update content of default html file
+
+sudo apt-get remove apache2  # doing this will keep apache2 directory and even will be listed in systemctl status apache2 but it will show as masked
+
+#Script for Azure VM linux extension to install apache automatically:
+
+#!/bin/bash
+sudo apt-get update -y
+sudo apt-get install apache2 -y
+sudo bash -c 'echo "Welcome to my websiteSite" > /var/www/html/index.html'
+
+#Package managers in Linux - dpkg (download the installation files manually, install required dependencies manually)
+# advanced package manager- apt (advanced package tool - finds the installation files and installs dependencies automatically)
+sudo apt update   # used to download package information from all configured storage
+sudo apt edit-sources   # displays the file containing URL where all packages are available
+
+apt list --installed  #lists installed packages
+apt list  #displays all available packages
+apt list | grep ^nmap
+apt show nmap # gived information about the package
+apt remove packagename  # uninstalls the package but the user data is intact
+apt purge packagename   # removes package along with all the user data stored by it
+apt list --installed | grep ^packagename  #look for installed package
+apt get upgrade   # upgrade all installed packages. Does not remove any packages and skips upgrading old packages if removal is needed
+apt get update && apt get full-upgrade # Removes old packages if needed to perform the upgrade of packages to their latest versions
+
+#snap is a package manager that allows us to upload our app to its respository and consume it immediately. While packages might take time
+# to be updated in apt repository. 
+
+sudo apt install snapd  
+sudo snap packagename # installing package in snap
+pip install -r requirements.txt   # pip is package manager for python 
+
+ps -aux | grep iscsi  # list all the processes that have iscsi in their name. daemons (background processes), names end with d, sshd
+# systemd is the master daemon that controls and manages other daemons in the OS
+# systemd is the first daemon to start in the operating system that starts other daemons
+pstree  # view the process tree which will show systemd at the top branching out to other daemons
+systemctl start daemonname  # start the daemon
+systemctl status daemonname
+systemctl stop daemonname
+
+systemctl restart sshd
+systemctl reload-or-restart daemonname  # reloads the daemon config if possible otherwise restarts the daemon
+systemctl enable sshd # enables or disables daemon startup on boot
+systemctl is-enabled  daemonname  # shows if the daemon is enabled or not.. same applies to systemctl is-active daemonname
+systemctl list-units  # displays the running daemons. Systemctl calls daemons as units
+systemctl list-units -t service   # only display service type daemons
+
+ps -u username | grep process  # search process running by user account
+pgrep processname   #returns the process ID of the process
+kill 1111   # kills a process id
+ ps -aux  # a to list processes for all users, u to display the username , x to list all processes 
+
+top   # displays the process by cpu usage.. htop does similar thing differently
+
+# for any running job like ping, hit Ctrl + Z and the job will be stopped. 
+jobs  # displays the list of jobs
+bg 1  # bg jobid starts the job in the background and we'll not be able to interact with it or kill it with Ctrl C
+fg 1  # starts the background job in the frontground and then we can use ctrl c to stop it
+
+#kill signals
+1) SIGHUP       2) SIGINT (CTRL C)       3) SIGQUIT      4) SIGILL       5) SIGTRAP
+ 6) SIGABRT      7) SIGBUS       8) SIGFPE       9) SIGKILL (FOrcefully kills process)     10) SIGUSR1
+11) SIGSEGV     12) SIGUSR2     13) SIGPIPE     14) SIGALRM     15) SIGTERM (DEFAULT KILL SIGNAL. ASK PROCESS TO DIE)
+16) SIGSTKFLT   17) SIGCHLD     18) SIGCONT (second time CTRL Z)     19) SIGSTOP (CTRL Z)     20) SIGTSTP
+21) SIGTTIN     22) SIGTTOU     23) SIGURG      24) SIGXCPU     25) SIGXFSZ
+26) SIGVTALRM   27) SIGPROF     28) SIGWINCH    29) SIGIO       30) SIGPWR
+31) SIGSYS      34) SIGRTMIN    35) SIGRTMIN+1  36) SIGRTMIN+2  37) SIGRTMIN+3
+38) SIGRTMIN+4  39) SIGRTMIN+5  40) SIGRTMIN+6  41) SIGRTMIN+7  42) SIGRTMIN+8
+43) SIGRTMIN+9  44) SIGRTMIN+10 45) SIGRTMIN+11 46) SIGRTMIN+12 47) SIGRTMIN+13
+48) SIGRTMIN+14 49) SIGRTMIN+15 50) SIGRTMAX-14 51) SIGRTMAX-13 52) SIGRTMAX-12
+53) SIGRTMAX-11 54) SIGRTMAX-10 55) SIGRTMAX-9  56) SIGRTMAX-8  57) SIGRTMAX-7
+58) SIGRTMAX-6  59) SIGRTMAX-5  60) SIGRTMAX-4  61) SIGRTMAX-3  62) SIGRTMAX-2
+63) SIGRTMAX-1  64) SIGRTMAX
+
+sleep 60 &  # specifying & at the end starts the process in background 
+ps  # find the process id running in the terminal 
+kill -19 processidofsleep # puts the job to stop
+pkill -9 ping   # forecefully kills all processes that has ping
+
+
+# Permissions in Linux
+
+drwxr-xr-x     2   root    root       4096 Aug 24 08:42 srv
+                  owner   group
+# d signifies that the file type is directory.. - for file, l for link
+# rwx are the permission that applies to the user that owns of the file/folder
+# x for file/script is for execution, x for folder is to allow cd into that folder.. otherwise we cannot go into the folder but we can access files and folders in directory
+# next 3 characters are for permission to the group
+# next 3 characters are for others (other than file owner and group)
+# by default if we create file using touch filename, user and group has read write access, world has read access and no one has execute access
+chmod g+rwx ./filename # grants multiple permissions to the group, g+rwx, u+rwx, o+rwx
+#Even if user does not have execute permission we can use bash filename to execute it
+chmod 777 filename
+chmod -R 600 foldername # -R option applies the permissions recursively to all files and folders mentioned
+# User who is member of root can change the owner of files and folders
+chown user1 /home/ankit/Downloads  # user1 is the owner od /home/ankit/Downloads folder but the owner for files inside downloads folder is not changed
+chown -R user1:user1 /home/ankit/Downloads  # user1 user and user1 group are now owner of downloads folder and all other content in it
+
+
+#FIND COMMAND
+
+find /home/ankit -name *.txt   #returns all txt files in ankit directory
+find /home/ankit -name file*.txt | grep -v /secrets  #grep -v would exclude secrets folder
+
+
+
