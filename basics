@@ -235,6 +235,9 @@ chown -R user1:user1 /home/ankit/Downloads  # user1 user and user1 group are now
 
 find /home/ankit -name *.txt   #returns all txt files in ankit directory
 find /home/ankit -name file*.txt | grep -v /secrets  #grep -v would exclude secrets folder
-
-
+find /home/ankit -name fileorfoldername -type d   # use type option to define if you want to look for directory or file. f for file, d for directory
+find . -name fileorfoldername # use . to look in the existing directory
+find . -name Documents -type f -exec rm {} +    # find documents file and remove it + or \; can be used as terminator when using exec command in find
+find Pictures/ -type f -exec chmod 600 {} +     # folder needs execute permission but file does not. In order to provide just read/write permission to files in a directory
+find Pictures/ -type d -exec chmod 700 {} +     # All folders in picture directory will be granted execute permission for the owner
 
