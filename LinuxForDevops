@@ -1,0 +1,19 @@
+echo hi   # used to print information from script and environment variables
+pwd   # print working directory
+mkdir   # makes new directory
+mkdir folder; cd folder ; touch file  # run multiple command in shell with semilon
+mkdir -p /temp/folder1/logs   # create directory tree in single command
+rm -r /temp/folder1/logs  # removed directory and its contents
+cp -r /temp/folder1 /temp2/folder2  # copies folder and its contents to new location
+touch file  # create file
+cat > file.txt  # allows us to add contents to the file. Enter ctrl + D to save the added content
+cat file.txt  # view file content
+mv oldfile newfile  #moving file.. if file is moved in the same directory, it is the same file with new name. so there is no separate command for rename
+rm filename   #remove file
+tree folderpath   # lists folders and files 
+ls -l   # lists folder and file contents with permission details
+
+######### WORKING WITH VI TEXT EDITOR
+
+vi filename.txt   # by default, we enter the command mode in vi editor. here we can write command like x to delete a character and dd to delete entire line .. /text to find text
+
