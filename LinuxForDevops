@@ -16,4 +16,40 @@ ls -l   # lists folder and file contents with permission details
 ######### WORKING WITH VI TEXT EDITOR
 
 vi filename.txt   # by default, we enter the command mode in vi editor. here we can write command like x to delete a character and dd to delete entire line .. /text to find text
+#VI commands
+# x to delete a letter, dd to delete entire line
+# yy to copy entire line, p to paste it
+# scroll up or down - ctrl u and ctrl d
+# :w to save the file, :w filename to specify the filename
+# :q to quit without saving changes
+# :wq to quit saving changes
+# finding stuff - /findthisword   .. use n to move cursor to the next occurance
+
+# whoami - displays current logged in user
+# id - displays the userid and group id that user belongs to
+# su username - switch to another user
+# ssh username@ip
+# /etc/sudoers file to add the user as root user
+# curl https://urltodownloadfile -O     # downloading file from the internet
+# wget https://urltodownloadfile -O filename.txt    #downloading file from the internet
+# ls /etc/*release*   # view the OS release version
+# cat /etc/*release*  # view details about the operating system
+
+#Package managers .. rpm stands for redhat package manager. dependencies are not installed with rpm
+rpm -i package.rpm  # installs package
+rpm -e package.rpm  # uninstalls package
+rpm -q package.rpm  # queries the package and provide details about it
+
+# yum uses rpm and installs all dependencies
+yum install ansible
+cat /etc/yum.repos.d  
+yum repolist # lists the repositories on a system
+ls /etc/yum.repos.d/  # this folder contains the file. It shows the file where the repositories are configured
+cat /etc/yum.repos.d/CentOS-Base.repo # shows the URL where all packages are stores
+# yum might not install latest version of a software.. use the software documentation to see how the latest packages can be installed
+
+yum list ansible  # shows installed and available packages
+yum remove ansible #removes package
+yum --showduplicates list ansible   # shows 
+
 
