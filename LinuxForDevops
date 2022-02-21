@@ -51,5 +51,37 @@ cat /etc/yum.repos.d/CentOS-Base.repo # shows the URL where all packages are sto
 yum list ansible  # shows installed and available packages
 yum remove ansible #removes package
 yum --showduplicates list ansible   # shows 
+yum install ansible-2.4.4.4 # installing specific package version
+
+# Managing daemons in Linux
+systemctl start httpd
+systemctl stop httpd
+systemctl status httpd
+systemctl enable httpd  #configure service to start at OS startup
+systemctl disable httpd # disables auto service start upon system restart
+
+#setup the application as service
+/etc/systemd/system   # this file stores all the daemons
+/usr/lib/systemd/system/app.service create a file here, servicename.service 
+In the unit file write the command below:
+  
+  [Unit]
+  Description= Running script as service 
+  
+  [Service]   # this is called section
+  ExecStart=command to run the program    # this is called directive
+  ExecStartPre=/temp/pre.sh   # specify the script to run before starting the service
+  ExecStartPost=/temp/post.sh # specify script to run after starting the service
+  Restart=Always  # restart service automatically if it crashes
+  
+  [Install]   # in this install section, specify the service to startup after native OS service startup
+  WantedBy=multi-user.target    # service can start after this multi-user.target is started. But systemctl enable servicename is required  
+  
+THat's it. 
+Use systemctl daemon-reload to tell the system to load the additional service that has been setup
+use systemctl start servicename from hereon
+systemctl cat app.service   # view config file for service
+
+
 
 
