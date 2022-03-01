@@ -83,5 +83,28 @@ use systemctl start servicename from hereon
 systemctl cat app.service   # view config file for service
 
 
+#NETWORKING
+
+ip link   # list interfaces on linux system
+ip addr   # view ip addresses on an interface
+ip addr add 192.168.1.10/24 dev eth0
+route   #display's kernel routing table
+ip route add 192.168.2.0 via 192.168.1.1  # add gateway ip address
+ip route add default via 192.168.1.1      # default route or use 0.0.0.0/0
+#put these in /etc/network/interfaces file to keep these settings after reboots
+#By default a linux system does not forward traffic between its multiple interfaces on different networks
+cat /proc/sys/net/ipv4/ip_forward     # default is 0, set this to 1 and traffic will be forwarded within NIC's
+#Above setting is not persistent between reboots, set net.ipv4.ip_forward=1 in /etc/sysctl.conf
+
+cat /etc/resolv.conf    # set dns server here as:  nameserver 192.168.1.100
+nameserver 192.168.1.100
+nameserver 8.8.8.8
+# by default name resolution in /etc/hosts file takes precedence
+# this can be changed by changing content of a file: /etc/nsswitch.conf 
+hosts: files dns      # file will take precedence over dns server
+# search can also be added in /etc/resolv.conf file to append the domain name when trying to resolve internal DNS name
+search domain.com  mydomain.com  prod.mydomain.com    # multiple domain names can be mentioned here
+# using nslookup does not look for nameservers set in /etc/hosts file
+dig www.google.com    #dns resolution testing toool with more capabilities than nslook
 
 
