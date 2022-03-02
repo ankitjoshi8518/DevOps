@@ -107,4 +107,9 @@ search domain.com  mydomain.com  prod.mydomain.com    # multiple domain names ca
 # using nslookup does not look for nameservers set in /etc/hosts file
 dig www.google.com    #dns resolution testing toool with more capabilities than nslook
 
+# Adding environment variable:
+export PATH=$PATH:/opt/jdk-13.0.2/bin
+
+
+
 
